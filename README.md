@@ -3,7 +3,7 @@ Collect data on the usage of public chairs provided by the city of Zurich to opt
 
 # Resources and ideas
 - wifi scanner was used for location detection on this [bachelor thesis about location of working tools](https://www.fhnw.ch/plattformen/bachelor20/IMVS29/index.html)
-- [google api to get location from wifi ssids](https://developers.google.com/maps/documentation/geolocation/overview#wifi_access_point_object}
+- [google api to get location from wifi ssids](https://developers.google.com/maps/documentation/geolocation/overview#wifi_access_point_object)
 - relative positioning by ble directional localisation with the help of a [ble gateway](https://thingoo.en.alibaba.com/product/62091463696-233065917/ble_5_1_asset_tracking_bluetooth_gateway_for_AOA_AOE_directional_location.html)
 - esp32 with wifi module to scan wifi
 - focus on usage of chair first/as separate task?

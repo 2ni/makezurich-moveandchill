@@ -1,5 +1,6 @@
 #include "Arduino.h"
 #include "Wire.h"
+#include "Serial.h"
 
 #include "tools.h"
 
@@ -12,22 +13,12 @@
 int counter = 0;
 
 void setup() {
-  while (!Serial);
+  hello();
 
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(LED_RT, OUTPUT);
-  blink(3);
-  Serial.println("Hello.");
-  Wire.begin();
 
-  byte error;
-  for (byte addr=1; addr<127; addr++) {
-    Wire.beginTransmission(addr);
-    error = Wire.endTransmission();
-    if (!error) {
-      Serial.printf("0x%02x\n", addr);
-    }
-  }
+  scan_i2c();
 }
 
 void loop() {

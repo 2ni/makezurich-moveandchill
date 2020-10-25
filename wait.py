@@ -20,4 +20,5 @@ while waiting_for_port:
 
 for port in list_ports.comports():
     if "Nano" in port.description:
-        os.system('pio device monitor --port {port}'.format(port=port.device))
+        os.system('./serialterminal.py --port {port}'.format(port=port.device))
+        # os.system('pio device monitor --port {port}'.format(port=port.device))

@@ -9,3 +9,22 @@ Collect data on the usage of public chairs provided by the city of Zurich to opt
 - focus on usage of chair first/as separate task?
 - flex bent sensor to detect if chair used
 - IMU sensor to detect movement which shows chair in use
+
+
+# Inital setup ([platformio](https://docs.platformio.org/en/latest/core/quickstart.html))
+```
+pio project init --board nano33ble
+pyenv virtualenv 3.7.8 chair
+pyenv local chair
+```
+
+# Things to do
+- [X] 1st connection of arduino nano 33
+- [ ] occupancy detection of a chair
+  - [ ] infrared
+  - [ ] flexbend
+  - [ ] strain gauge / load cell with HX711
+- [ ] function to check if chair in the sun or not
+- [ ] measure duration of occupancy
+- [ ] send data to ttn
+- [ ] pass data to some db which is publicly available

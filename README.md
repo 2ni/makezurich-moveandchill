@@ -14,6 +14,9 @@ Collect data on the usage of public chairs provided by the city of Zurich to opt
 # Inital setup ([platformio](https://docs.platformio.org/en/latest/core/quickstart.html))
 ```
 pio project init --board nano33ble
+pio lib install 6590 # hts221 (temperature, humidity) 
+pio lib install 6591 # lps22hb (barometric pressure)
+pio lib install 6589 # lsm9ds3 (9-axis imu)
 pyenv virtualenv 3.7.8 chair
 pyenv local chair
 ```

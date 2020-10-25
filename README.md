@@ -23,9 +23,9 @@ pyenv local chair
 
 # Things to do
 - [X] 1st connection of arduino nano 33
-- [ ] occupancy detection of a chair
+- [.] occupancy detection of a chair
   - [ ] infrared
-  - [ ] flexbend
+  - [X] flexbend (quadratic)
   - [ ] strain gauge / load cell with HX711
 - [ ] function to check if chair in the sun or not
 - [ ] measure duration of occupancy

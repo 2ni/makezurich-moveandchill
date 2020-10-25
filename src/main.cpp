@@ -18,6 +18,7 @@
 
 int counter = 0;
 unsigned long current_time;
+unsigned long seating_start_time = 0;
 bool is_occupied = false;
 
 void setup() {
@@ -44,23 +45,27 @@ void setup() {
   if (!HTS.begin()) {
     Serial.println(NOK("temperature/humidity sensor init failure"));
   }
+  Serial.println("Waiting to be seated...");
 }
 
 void loop() {
-  // read seat sensor
   is_occupied = digitalRead(SEAT) ? false : true;
-  if (is_occupied) {
+
+  // someone takes a seat
+  if (is_occupied && !seating_start_time) {
+    seating_start_time = millis();
     digitalWrite(LED_BUILTIN, 1);
-  } else {
-    digitalWrite(LED_BUILTIN, 0);
+    Serial.println("Seat taken");
   }
 
-  // output some sensor data
-  if ((millis()-current_time) > 1000) {
-    current_time = millis();
+  // someone leaves the seat
+  if (!is_occupied && seating_start_time) {
+    digitalWrite(LED_BUILTIN, 0);
+    Serial.printf("Seat freed\n duration: %lu seconds\n", (millis()-seating_start_time)/1000);
+    seating_start_time = 0;
     float temperature = HTS.readTemperature(); // °C
     float humidity = HTS.readHumidity(); // %
     float pressure = BARO.readPressure(); // kPa
-    Serial.printf("(%u) temperature: %.1fC, humidity: %.1f%%, pressure: %.1f\n", counter++, temperature, humidity, pressure);
+    Serial.printf(" temperature: %.1fC\n humidity: %.1f%%\n pressure: %.1f\n", temperature, humidity, pressure);
   }
 }

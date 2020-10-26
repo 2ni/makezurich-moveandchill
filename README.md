@@ -17,6 +17,7 @@ pio project init --board nano33ble
 pio lib install 6590 # hts221 (temperature, humidity) 
 pio lib install 6591 # lps22hb (barometric pressure)
 pio lib install 6589 # lsm9ds3 (9-axis imu)
+pio lib install 6616 # light APDS9960
 pyenv virtualenv 3.7.8 chair
 pyenv local chair
 ```
@@ -31,3 +32,7 @@ pyenv local chair
 - [ ] measure duration of occupancy
 - [ ] send data to ttn
 - [ ] pass data to some db which is publicly available
+
+# Manual fix about attachInterrupt only calling one
+- see this [patch](https://github.com/arduino/ArduinoCore-nRF528x-mbedos/pull/69/commits/af5d3d43ae435e392a985e1b7b18491b74b33a5b)
+- fixed in this file: ~/.platformio/packages/framework-arduino-nrf52-mbedos/cores/arduino/Interrupts.cpp

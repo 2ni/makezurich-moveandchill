@@ -29,3 +29,15 @@ void scan_i2c() {
   }
   Serial.println(OK("Done."));
 }
+
+/*
+ * go into system on mode (cpu and most peripherals are powered down)
+ * low frequency clock and RTC0 are running
+ * wake up from interrupt from any peripheral
+ * see https://devzone.nordicsemi.com/f/nordic-q-a/34584/wfe-wfi-and-systemon-mode-differences
+ */
+void low_power() {
+  __WFE();
+  __SEV();
+  __WFE();
+}

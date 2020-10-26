@@ -11,5 +11,6 @@
 void blink(byte amount);
 void hello();
 void scan_i2c();
+void low_power();
 
 #endif

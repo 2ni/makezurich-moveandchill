@@ -1,3 +1,0 @@
-[submodule "lib/lorawan_modem"]
-	path = lib/lorawan_modem
-	url = https://github.com/2ni/lorawan_modem

@@ -31,19 +31,15 @@
 #include <Arduino_APDS9960.h> // light
 
 #include "tools.h"
+#include "loramodem.h"
 
-#ifndef LED_BUILTIN
-#define LED_BUILTIN 13
-#endif
 #define SEAT 12
-
-#define LED_RED 9
-#define LED_YELLOW 10
-#define LED_GREEN 11
 
 unsigned long current_time;
 unsigned long seating_start_time = 0;
 volatile bool is_occupied = false;
+
+LORAMODEM modem;
 
 void ISR_seat_change() {
   is_occupied = !digitalRead(SEAT);
@@ -58,17 +54,6 @@ void setup() {
   pinMode(SEAT, INPUT);
   attachInterrupt(digitalPinToInterrupt(SEAT), ISR_seat_change, CHANGE);
 
-  // sensirion ess
-  pinMode(LED_RED, OUTPUT);
-  pinMode(LED_YELLOW, OUTPUT);
-  pinMode(LED_GREEN, OUTPUT);
-
-  digitalWrite(LED_RED, HIGH);
-  digitalWrite(LED_GREEN, HIGH);
-  digitalWrite(LED_YELLOW, HIGH);
-
-  scan_i2c();
-
   if (!BARO.begin()) {
     Serial.println(NOK("barometric sensor init failure"));
   }
@@ -77,6 +62,13 @@ void setup() {
     Serial.println(NOK("temperature/humidity sensor init failure"));
   }
   Serial.println("Waiting to be seated...");
+
+  modem.begin();
+  uint8_t response[255] = {0};
+  uint8_t len = 0;
+  if (modem.command(CMD_GETVERSION, response, &len) == OK) {
+    modem.print_arr("response", response, len);
+  }
 }
 
 void loop() {

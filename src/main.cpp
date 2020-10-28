@@ -39,7 +39,7 @@ unsigned long current_time;
 unsigned long seating_start_time = 0;
 volatile bool is_occupied = false;
 
-LORAMODEM modem;
+LoRaWANModem modem;
 
 void ISR_seat_change() {
   is_occupied = !digitalRead(SEAT);
@@ -63,12 +63,49 @@ void setup() {
   }
   Serial.println("Waiting to be seated...");
 
+  const uint8_t appeui[8] = { 0x70, 0xB3, 0xD5, 0x7E, 0xD0, 0x03, 0x71, 0x46 };
+  const uint8_t appkey[16] = { 0x0D, 0x48, 0x3C, 0xF3, 0xAF, 0x9D, 0xE1, 0x4D, 0x86, 0x7F, 0xD0, 0x62, 0x18, 0xD3, 0xB6, 0xEE };
+  uint8_t payload[3] = { 0x12, 0x13, 0x14 };
   modem.begin();
-  uint8_t response[255] = {0};
-  uint8_t len = 0;
-  if (modem.command(CMD_GETVERSION, response, &len) == OK) {
-    modem.print_arr("response", response, len);
+
+  /*
+  modem.cmd_and_result("set app eui", CMD_SETJOINEUI, appeui, 8);
+  modem.cmd_and_result("set app key", CMD_SETNWKKEY, appkey, 16);
+  modem.info();
+  modem.write(CMD_SETJOINEUI, appeui, 8);
+  modem.write(CMD_SETNWKKEY, appkey, 16);
+  Serial.println("done.");
+  return;
+  */
+
+  modem.cmd_and_result("leave", CMD_LEAVENETWORK);
+
+  modem.join(appeui, appkey);
+  current_time = millis();
+  while (modem.is_joining()) {
+    if ((millis()-current_time) > 1000) {
+      current_time = millis();
+      Serial.println("waiting ...");
+    }
   }
+
+  /*
+  bool joining = true;
+  while (joining) {
+    if ((millis()-current_time) > 1000) {
+      uint8_t response_len;
+      uint8_t response[5] = {0};
+      Status s = modem.command(CMD_GETEVENT, response, &response_len);
+      joining = response[0] != EVT_JOINED || s == OK ? true : false;
+      current_time = millis();
+      Serial.printf("waiting...status: 0x%02x, response: 0x%02x\n", (uint8_t)s, response[0]);
+      modem.print_arr(response, response_len);
+    }
+  }
+  */
+
+  modem.send(payload, 3);
+
 }
 
 void loop() {

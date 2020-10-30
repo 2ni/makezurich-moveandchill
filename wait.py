@@ -24,7 +24,7 @@ while waiting_for_port:
         if lost_port_once and port_is_available:
             waiting_for_port = False
     else:
-        waiting_for_port = False
+        waiting_for_port = not port_is_available
 
 for port in list_ports.comports():
     if "Nano" in port.description:

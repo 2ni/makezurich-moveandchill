@@ -17,6 +17,7 @@
 - serial communication is a pain
 - datasheets are key!
 - 1st time hackathon, it's fun!
+- arduino ide seems to suck big time. Luckily I used platformio :-)
 
 ### Next steps / missing items
 - [ ] geolocalization

@@ -63,7 +63,8 @@ Sample samples[MAX_SAMPLES] = {0};
 LoRaWANModem modem;
 Status join_status;
 
-// GPS Module accessed via Serial1 (Rx,Tx on X1 or directly), to use other lines use UART mySerial(digitalPinToPinName(4), digitalPinToPinName(3), NC, NC);
+// GPS Module accessed via serial change to pins that are free
+UART gpsSerial(digitalPinToPinName(4), digitalPinToPinName(3), NC, NC);
 // gps module defaults to 9600Bd
 // see below link for non*continuous GPS usage Chapeter 11.2
 // https://www.u-blox.com/en/ubx-viewer/view/u-blox7-V14_ReceiverDescriptionProtocolSpec_(GPS.G7-SW-12001)_Public?url=https%3A%2F%2Fwww.u-blox.com%2Fsites%2Fdefault%2Ffiles%2Fproducts%2Fdocuments%2Fu-blox7-V14_ReceiverDescriptionProtocolSpec_%2528GPS.G7-SW-12001%2529_Public.pdf
@@ -135,8 +136,8 @@ void setup() {
 
 void loop() {
   // feed GPS
-  while (Serial1.available() > 0)
-    GPS.encode(Serial1.read());
+  while (gpsSerial.available() > 0)
+    GPS.encode(gpsSerial.read());
 
   if ((millis()-timekeeper_seating) > DELAY_SEATING) {
     timekeeper_seating = millis();

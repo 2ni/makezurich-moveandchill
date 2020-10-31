@@ -1,5 +1,14 @@
 ### Goal of the challenge [#moveandchill](https://makezurich.ch/start/2/) of [makezurich.ch](https://makezurich.ch) 2020
-Collect data on the usage of public chairs provided by the city of Zurich to optimize the amount and placements of the offer (eg time, duration is used, if in th sun or shadow, ...)
+Proof of concept based on the [Arduino Nano BLE 33](https://github.com/yene/Nano-33-BLE-Sense) to measure how public chairs are used in the city of Zurich during the [#makezurich](https://makezurich.ch/) hackathon.
+
+It is an implementation of the [#moveandchill](https://makezurich.ch/start/2/) challenge.
+
+### Resources
+- [lorawan library](https://github.com/2ni/lorawan_modem) to communicate with the lorawan module Murata ST B-L072Z-LRWAN1 or the Miromico FMLR-72-U-STL0Z
+- [tech specs](https://makezurich.ch/techspecs/) and [description](https://github.com/make-zurich/makezurich-hardware-intro#arduino-nano-33-ble-sense)
+- [schematic](https://easyeda.com/vkbs/makezurich-moveandchill) [pdf](schematic/Schematic_makezurich-moveandchill_2020-10-31_12-12-48.pdf)
+- [output examples](examples/)
+- [data output on thingspeak](https://thingspeak.com/channels/1213808)
 
 ### Setup
 ```
@@ -15,18 +24,18 @@ git submodule update --init --recursive
 - flex bent sensor to detect if chair used
 - IMU sensor to detect movement which shows chair in use
 
-
 ### Things to do
 - [X] 1st connection of arduino nano 33
-- [ ] build arduino library to commuincate with murata module
-- [.] occupancy detection of a chair
-  - [ ] infrared
+- [X] build arduino library to commuincate with murata module
+- [X] occupancy detection of a chair
+  - [X] infrared
   - [X] flexbend (quadratic)
-  - [ ] strain gauge / load cell with HX711
-- [ ] function to check if chair in the sun or not
-- [ ] measure duration of occupancy
-- [ ] send data to ttn
-- [ ] pass data to some db which is publicly available
+  - [X] strain gauge / load cell with HX711
+- [X] function to check if chair in the sun or not
+- [X] measure duration of occupancy
+- [X] send data to ttn
+- [X] pass data to some db which is publicly available
+- [ ] detect position of chair
 
 ### Manual fix about attachInterrupt only calling one
 - see this [patch](https://github.com/arduino/ArduinoCore-nRF528x-mbedos/pull/69/commits/af5d3d43ae435e392a985e1b7b18491b74b33a5b)

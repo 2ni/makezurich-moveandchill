@@ -1,5 +1,7 @@
 .pio
+.vscode
 .python-version
 *.swp
 sandbox
 keys.h
+.DS_Store

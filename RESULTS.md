@@ -1,7 +1,8 @@
 ### Achievements
-- implemented of alibrary to communicate with the lorawan module
+- implemented a library to communicate with the lorawan module
 - implemented a poc sending duration of occupancy along with a summary of environmental data
-- "visualise" data
+- very basic "visualisation"
+- met new people!
 
 ![result](/media/result.jpg)
 
@@ -14,12 +15,14 @@
 - great format, aka small junks during multiple days
 - forming teams was challenging
 - serial communication is a pain
+- datasheets are key!
 - 1st time hackathon, it's fun!
 
 ### Next steps / missing items
 - [ ] geolocalization
+- [ ] low power mode / power mgmt
+- [ ] waterproof box
+- [ ] sync with representatives
 - [ ] make data to opendata
 - [ ] test it in real
-- [ ] "sleep" mode of all devices
 - [ ] meaningful representation
-

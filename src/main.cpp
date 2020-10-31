@@ -26,6 +26,7 @@
 #include <Arduino_LPS22HB.h> // barometric pressure
 #include <Arduino_LSM9DS1.h> // 9-axis imu
 #include <Arduino_APDS9960.h> // light, proximity
+#include <TinyGPS++.h>
 
 #include "tools.h"
 #include "loramodem.h"
@@ -61,6 +62,12 @@ Sample samples[MAX_SAMPLES] = {0};
 
 LoRaWANModem modem;
 Status join_status;
+
+// GPS Module accessed via Serial1 (Rx,Tx on X1 or directly), to use other lines use UART mySerial(digitalPinToPinName(4), digitalPinToPinName(3), NC, NC);
+// gps module defaults to 9600Bd
+// see below link for non*continuous GPS usage Chapeter 11.2
+// https://www.u-blox.com/en/ubx-viewer/view/u-blox7-V14_ReceiverDescriptionProtocolSpec_(GPS.G7-SW-12001)_Public?url=https%3A%2F%2Fwww.u-blox.com%2Fsites%2Fdefault%2Ffiles%2Fproducts%2Fdocuments%2Fu-blox7-V14_ReceiverDescriptionProtocolSpec_%2528GPS.G7-SW-12001%2529_Public.pdf
+TinyGPSPlus GPS;
 
 void ISR_seat_change_flex() {
   is_occupied_flexband = !digitalRead(PIN_FLEXBAND);
@@ -127,6 +134,10 @@ void setup() {
 }
 
 void loop() {
+  // feed GPS
+  while (Serial1.available() > 0)
+    GPS.encode(Serial1.read());
+
   if ((millis()-timekeeper_seating) > DELAY_SEATING) {
     timekeeper_seating = millis();
     // pull proximity sensor
@@ -143,6 +154,7 @@ void loop() {
     seating_start_time = millis();
     digitalWrite(LED_BUILTIN, 1);
     Serial.println(NOK("Seat taken"));
+    // TODO turn off GPS before going into low power mode
     // low_power();
   }
 
@@ -155,6 +167,7 @@ void loop() {
     analogReadResolution(8);
     uint8_t light = analogRead(PIN_LIGHT);
     Serial.printf(" (%u) temperature: %.1fC light: %u humidity: %.1f%% pressure: %.1f\n", sample_count, temperature, light, humidity, pressure);
+    Serial.printf("      location lat:%.6lf long: %.6lf %s\n", GPS.location.lat(), GPS.location.lng(), GPS.location.isValid() ? "" : "invalid");
 
     // add to buffer
     Sample s = { .temperature=(uint8_t)(temperature + 0.5), .light=light };
@@ -178,12 +191,18 @@ void loop() {
       // payload: position(4), duration(2), 0..22 x[temperature(1), light(1)]
       // TODO add position
       if (join_status == OK) {
-        uint8_t payload[2*MAX_SAMPLES] = {0};
+        uint8_t payload[2+4+2*MAX_SAMPLES] = {0};
         uint8_t sample_len = sample_count >= MAX_SAMPLES ? MAX_SAMPLES : sample_count;
-        uint8_t payload_len = 2+2*sample_len; // duration(2), per sample 2 measures temp(1), light(1)
+        uint8_t payload_len = 2+4+2*sample_len; // duration(2), location, per sample 2 measures temp(1), light(1)
         payload[0] = duration & 0x00ff; // lsb
         payload[1] = (uint8_t)(duration >> 8); //msb
-        uint8_t p_payload = 2;
+        // location
+        // TODO double prec degrees into uin16
+        payload[2] = 0;
+        payload[3] = 0;
+        payload[4] = 0;
+        payload[5] = 0;
+        uint8_t p_payload = 6;
         for (uint8_t i=0; i<sample_len; i++) {
           payload[p_payload+2*i] = samples[i].temperature;
           payload[p_payload+2*i+1] = samples[i].light;
@@ -200,6 +219,7 @@ void loop() {
     is_occupied = false;
     seating_start_time = 0;
     digitalWrite(LED_BUILTIN, 0);
+    // TODO: wait for location and turn off GPS before going into low power mode
     // low_power();
   }
 }

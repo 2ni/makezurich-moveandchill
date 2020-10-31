@@ -27,3 +27,14 @@
 - [ ] make data to opendata
 - [ ] test it in real
 - [ ] meaningful representation
+
+### Sensor comparison for occupancy
+
+| Sensor                   | Advantage                                                              | Disadvantage                              |
+| ------                   | ---------                                                              | ------------                              |
+| force sensing resistor   | cheap                                                                  | must be mounted on the chair (top side)   |
+|                          | best for low power (interrupt based GPIO with high impedance resistor) |                                           |
+| IR sensor                | can be mounted on the back of the chair                                | data must be pulled at regular intervalls |
+|                          | sensitivity can be adapted                                             |                                           |
+| proximity sensor Nano 33 | on board                                                               | low sensitivity (~5-10cm only)            |
+|                          | no additional pin used                                                 | data mus be pulled at regular intervalls  |

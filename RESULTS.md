@@ -5,6 +5,7 @@
 - met new people!
 
 ![result](/media/result.jpg | width=200)
+<img src="media/result.jpg" width="200" />
 
 ### How we built it
 - started with simple stuff, such as detection of occupancy

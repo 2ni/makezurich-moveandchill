@@ -31,6 +31,8 @@
 #include "loramodem.h"
 #include "keys.h"
 
+#define PROXIMITY_ON false
+
 #define PIN_FLEXBAND 12
 #define PIN_IR 11
 #define PIN_LIGHT A0
@@ -130,7 +132,7 @@ void loop() {
   if ((millis()-timekeeper_seating) > DELAY_SEATING) {
     timekeeper_seating = millis();
     // pull proximity sensor
-    if (APDS.proximityAvailable()) {
+    if (PROXIMITY_ON && APDS.proximityAvailable()) {
       // Serial.printf("proximity: %u\n", APDS.readProximity());
       is_occupied_proximity = APDS.readProximity() > 240 ? false : true;
     }
@@ -165,7 +167,7 @@ void loop() {
   // someone leaves the seat (all sensors report false)
   // TODO ignore short sessions
   // TODO add duration to payload
-  if (!is_occupied_flexband && !is_occupied_proximity && !is_occupied_ir && seating_start_time) {
+  if (!is_occupied_flexband && (!PROXIMITY_ON || !is_occupied_proximity) && !is_occupied_ir && seating_start_time) {
     uint16_t duration = (millis()-seating_start_time)/1000;
     Serial.printf(OK("Seat freed") " \n duration: %u seconds\n", duration);
 

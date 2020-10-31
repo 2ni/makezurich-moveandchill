@@ -4,7 +4,7 @@
 - very basic "visualisation"
 - met new people!
 
-![result](/media/result.jpg width=200)
+![result](/media/result.jpg | width=200)
 
 ### How we built it
 - started with simple stuff, such as detection of occupancy

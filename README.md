@@ -3,6 +3,8 @@ Proof of concept based on the [Arduino Nano BLE 33](https://github.com/yene/Nano
 
 It is an implementation of the [#moveandchill](https://makezurich.ch/start/2/) challenge.
 
+See the [RESULTS](RESULTS.md) for a summary of the achievements.
+
 ### Resources
 - [lorawan library](https://github.com/2ni/lorawan_modem) to communicate with the lorawan module Murata ST B-L072Z-LRWAN1 or the Miromico FMLR-72-U-STL0Z
 - [tech specs](https://makezurich.ch/techspecs/) and [description](https://github.com/make-zurich/makezurich-hardware-intro#arduino-nano-33-ble-sense)

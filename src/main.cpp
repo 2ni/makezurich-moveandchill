@@ -131,13 +131,16 @@ void setup() {
   // modem.cmd_and_result("leave", CMD_LEAVENETWORK);
   join_status = modem.join(appeui, appkey);
 
+  gpsSerial.begin(9600, SERIAL_8N1);
+
   Serial.println("Waiting to be seated...");
 }
 
 void loop() {
   // feed GPS
-  while (gpsSerial.available() > 0)
+  while (gpsSerial.available() > 0) {
     GPS.encode(gpsSerial.read());
+  }
 
   if ((millis()-timekeeper_seating) > DELAY_SEATING) {
     timekeeper_seating = millis();
